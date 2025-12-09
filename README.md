@@ -1,13 +1,13 @@
 # SafeRouteApp
 MART391 Final
 
+🌐 **[Try the Live Demo](https://github.com/kayceetopel2/SafeRouteApp)** (Link to deployed Codespace - update with your public URL)
+
 ## Prototype Run Instructions
 
-This workspace includes a small Node "render-service" that serves a frontend SPA prototype and simple API stubs, and a Python FastAPI prototype in `saferoute_prototype`.
+This workspace includes a Python FastAPI prototype that serves an interactive Leaflet-based map application for emergency routing with real-time hazard visualization.
 
-- Run the Python FastAPI prototype (serves the Leaflet SPA) and the optional Electron wrapper:
-
-Python FastAPI (recommended for prototype):
+### Quick Start - Python FastAPI (recommended for prototype):
 
 ```bash
 cd saferoute_prototype
@@ -15,18 +15,51 @@ python3 -m pip install -r requirements.txt || python3 -m pip install fastapi uvi
 uvicorn saferoute_api:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Open `http://localhost:8000` in a browser to view the SafeRoute SPA. The SPA includes:
-- Large `Get Safe Route` and `Send SOS` buttons
-- Leaflet map with route rendering and SOS markers
-- Text-only and voice modes (toggleable)
+**Access the app:** Open `http://localhost:8000` in a browser
 
-Optional Electron desktop wrapper (loads the FastAPI app URL):
+### Features:
+- **Interactive Map**: Click anywhere on the map to set your location, or type an address
+- **Address Autocomplete**: Type-ahead suggestions powered by Nominatim
+- **Multi-Hazard Demo**: Displays flooded (🌊), fire (🔥), downed powerline (⚡), and blocked (🚧) streets within 3 miles
+- **Smart Routing**: OSRM-powered street-level routing to nearest safe zone (schools)
+- **SOS System**: Send emergency pings with survivor counts and messages
+- **Responder View**: Access `/responders` endpoint to see all active SOS pings
+- **Voice Mode**: Toggle speech synthesis for route updates
+
+- **Voice Mode**: Toggle speech synthesis for route updates
+
+### Optional Electron Desktop Wrapper:
 
 ```bash
 cd render-service/electron
 npm install
 npm start
 ```
+
+### Sharing Your Demo:
+
+**For GitHub Codespaces:**
+1. Make sure the server is running on port 8000
+2. Go to the **PORTS** tab in VS Code
+3. Right-click port 8000 → **Port Visibility** → **Public**
+4. Copy the forwarded URL (e.g., `https://xxx-8000.app.github.dev`)
+5. Share the URL with others to try your demo!
+
+### API Endpoints:
+- `GET /` - Main SafeRoute SPA interface
+- `GET /find_safe_zone?address=<addr>` - Geocode address and find route to nearest safe zone
+- `POST /sos` - Submit emergency SOS ping with location and details
+- `GET /sos` - Retrieve all persisted SOS pings
+- `GET /responders` - Responder map view showing all active SOS locations
+- `GET /status` - System status and hazard summary
+
+### Technologies:
+- **Backend**: FastAPI, Python 3.12
+- **Frontend**: Leaflet.js, vanilla JavaScript
+- **Geocoding**: Nominatim (OpenStreetMap)
+- **Routing**: OSRM (Open Source Routing Machine)
+- **Hazard Data**: Overpass API for OSM queries
+- **Database**: SQLite for SOS persistence
 
 Notes:
 - The FastAPI backend now provides geocoded demo scenarios and a POST `/sos` endpoint that accepts exact GPS coordinates and messages.
